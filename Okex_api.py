@@ -30,9 +30,19 @@ class OKEX_API(object):
             res = requests.get(request_url, timeout=10)
             return res.json()
         except Exception as e:
-            print(e)
-            logger.error("GET Kline info Failed")
+            logger.error("GET Kline info Failed because of %s" % e)
             return None
+
+    def get_market_info(self):
+        request_url = self.url + '/ticker.do?symbol=%s' % self.symbol
+        try:
+            logger.info("Get market info")
+            res = requests.get(request_url, timeout=10)
+            return res.json()["ticker"]
+        except Exception as e:
+            logger.error("GET market info Failed because of %s" % e)
+            return None
+
 
     def get_userinfo(self):
         post_data = dict()
@@ -44,8 +54,7 @@ class OKEX_API(object):
             res = requests.post(request_url, data=post_data, headers=self.header, timeout=10)
             return res.json()
         except Exception as e:
-            print(e)
-            logger.error('Get user info Failed')
+            logger.error('Get user info Failed because of %s' % e)
             return None
 
     def trade(self, type, **kwargs):
@@ -76,7 +85,7 @@ class OKEX_API(object):
 
 
 if __name__ == '__main__':
-    a = OKEX_API('insur_usdt')
-    print(a.get_kline('15min', 3))
-    # # print(a.get_userinfo())
+    a = OKEX_API('btc_usdt')
+    # print(a.get_kline('15min', 3))
+    # print(a.get_userinfo())
     # print(a.trade('sell_market', amount=100))
