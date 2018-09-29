@@ -86,10 +86,14 @@ class MyStrategy(MysqlConnection):
         symbol = OKEX_API('btc_usdt')
         interval = '15min'
         trade_percent = 0.5
+        time_count = 0
         while True:
             kline_info = symbol.get_kline(interval, 3)
             if not kline_info[-1][0] == self.last_candle_time_stamp * 1000:
-                time.sleep(3)
+                time.sleep(5)
+                time_count += 5
+                if time_count == 25:
+                    return
                 continue
             break
         first_candle, second_candle, third_candle = kline_info[0], kline_info[1], kline_info[2]
