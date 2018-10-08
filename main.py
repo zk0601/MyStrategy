@@ -1,4 +1,5 @@
 import time
+import os
 import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -7,7 +8,7 @@ from logs import log
 from models.btc_usdt import StrategyModel, KlineInfoModel, TradeModel
 
 logger = log()
-
+# file = os.path.join(os.path.dirname(__file__), "index.html")
 
 class MysqlConnection(object):
     def __init__(self):
@@ -88,7 +89,7 @@ class MyStrategy(MysqlConnection):
         trade_percent = 0.5
         time_count = 0
         while True:
-            kline_info = symbol.get_kline(interval, 3)
+            kline_info = symbol.get_kline(interval, 4)
             if not kline_info[-1][0] == self.last_candle_time_stamp * 1000:
                 time.sleep(5)
                 time_count += 5
